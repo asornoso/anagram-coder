@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+html, body{
+  margin:0;
+  background-color: #282828;
+  color: #fafafa;
+  font-family: 'Raleway', sans-serif;
+}
+
+#react-container{
+  display: flex;
+  flex-flow: column;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+
+  width: 100vw;
+  height: 100vh;
+  min-width: 600px;
+  min-height: 600px;
+}
+
+#title{
+  text-transform: uppercase;
+  border: 4px double white;
+  margin: 2em 0 1em 0;
+  padding: 0.8em 1.5em 0.8em 1.5em;
+  font-weight: 200;
+  font-size:2em;
+}
+
+#title h1{
+  font-weight: inherit;
+}
+
+#type-selector{
+  height:2em;
+}
+
+#radio-form{
+  display:flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-content: center;
+}
+
+.radio-item{
+  margin: 0.5em;
+  text-transform: uppercase;
+}
+
+#input_prompt{
+  text-align: center;
+}
+#input #prompt {
+  font-size: 1.8em;
+  margin-bottom: 0.3em;
+}
+
+#user_input {
+  text-align: center;
+  width: 25em;
+  height: 1.8em;
+  font-size: 1.5em;
+  background-color: transparent;
+  border: none;
+  border-bottom: 4px solid white;
+  color: white;
+  margin-top:1em;
+  margin-bottom: 1em;
+}
+
+#input-container{
+  /* display:flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-content: center;
+  justify-content: center; */
+  text-align: center;
+}
+
+#input-container button{
+  margin:2em;
+}

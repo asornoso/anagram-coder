@@ -1,13 +1,16 @@
-const fs = require('fs')
-const MapSet = require('./MapSet.js')
-const AnagramTreeNode = require('./AnagramTreeNode.js')
 
-class AnagramDecoder{
+import MapSet from './MapSet.js'
+import AnagramTreeNode from './AnagramTreeNode.js'
+import {firstnames} from './wordlists/firstnames.js'
+import {surnames} from './wordlists/surnames.js'
+import {words} from './wordlists/words_array.js'
+
+class AnagramEncoder{
 
   constructor(){
-    this.words = []
-    this.firstnames = []
-    this.surnames = []
+    this.words = words
+    this.firstnames = firstnames
+    this.surnames = surnames
 
     this.user_input = undefined
     this.anagrams = []
@@ -15,12 +18,9 @@ class AnagramDecoder{
   }
 
   //Finds an anagram in a name
-  findAnagramName(name){
-    return new Promise( (res, rej) => {
+  async findAnagramName(name){
       let names = []
       name = name.toLowerCase()
-
-      this.load_names().then( (status) => {
 
         let input_map = new MapSet([...name.replace(/ /g, '')])
         for(let i = 0; i < this.firstnames.length; i++){
@@ -31,7 +31,7 @@ class AnagramDecoder{
             continue
 
           let leftovers = MapSet.subtract(input_map, fmap)
-          if(leftovers.size == 0)
+          if(leftovers.size === 0)
             continue;
 
           for(let j = 0; j < this.surnames.length; j++){
@@ -41,38 +41,27 @@ class AnagramDecoder{
           }
 
         }
-        res(names)
-
-      }).catch((err) => {
-        console.log(err)
-      })
-    })
+        return names
 
   }
 
   //Finds a single word anagram for parameter
-  findSingleWordAnagram(word){
-    return new Promise( (res, rej) => {
+  async findSingleWordAnagram(word){
       //Remove white spaces in parameter
       word = word.replace(/ /g, '')
       //Load the english word list
-      this.load_words().then( ()=> {
         let anagrams = []
         for(let i = 0; i < this.words.length; i++){
           if(this.areAnagrams(word, this.words[i]))
             anagrams.push(this.words[i])
         }
-        res(anagrams)
-      })
-    })
+        return anagrams
+
 
   }
 
   //Finds an anagram from a while phrase
-  findPhraseAnagram(phrase, return_tree = false){
-    return new Promise((res, rej) => {
-      //Load the english word list
-      this.load_words().then( ()=> {
+  async findPhraseAnagram(phrase, return_tree = false){
         //Convert phrase into set without spaces
         let map_phrase = new MapSet([...phrase.replace(/ /g, '').toLowerCase()])
         //Create your anagramTree with the phrase as the root node
@@ -81,11 +70,9 @@ class AnagramDecoder{
         let phrases = []
         this.treeAnagramFinder(rootNode, phrases)
         if(return_tree)
-          res( [phrases, rootNode] )
-        else
-          res( phrases)
-      })
-    })
+         return [phrases, rootNode]
+       else
+         return phrases
 
   }
 
@@ -101,54 +88,11 @@ class AnagramDecoder{
     return MapSet.equals_strict(map1, map2)
   }
 
-  //Loads wordlist to class variable words
-  load_words(){
-    return new Promise((res, rej) => {
-      if(this.words.length > 0)
-        res(0)
-
-      this.load_word_array('./wordlists/words_array.json').then( words => {
-        this.words = words
-        res(0)
-      })
-    })
-  }
-
-  //Loads name lists to class variables firstnames and surnames
-  load_names(){
-    return new Promise((res, rej) => {
-      if(this.firstnames.length > 0 && this.surnames.length > 0)
-        res(-1)
-
-      let promises = []
-      promises.push(this.load_word_array('./wordlists/firstnames.json'))
-      promises.push(this.load_word_array('./wordlists/surnames.json'))
-
-
-      Promise.all( promises).then( data_array => {
-        this.firstnames = data_array[0]
-        this.surnames = data_array[1]
-        res(0)
-      })
-
-    })
-  }
-
-  //Loads the specified word array and returns it
-  load_word_array(filepath){
-    return new Promise( function(res, rej){
-      fs.readFile(filepath, 'utf8', (err, data) => {
-        if (err) throw err
-        let strings = JSON.parse(data)
-        res(strings)
-      })
-    })
-  }
 
   //Traverses a tree in reverse to make a phrase and returns that phrase
   traverseToRootFrom(node){
     let phrase = ""
-    while(node.parent != undefined){
+    while(node.parent !== undefined){
       phrase = node.data.word+' '+ phrase
       node = node.parent
     }
@@ -169,7 +113,7 @@ class AnagramDecoder{
         node.children.push(child)
         if(new_leftovers.size > 1)
           this.treeAnagramFinder(child, found)
-        if(new_leftovers.size == 0)
+        if(new_leftovers.size === 0)
           found.push(this.traverseToRootFrom(child).trim())
       }
     }
@@ -179,17 +123,4 @@ class AnagramDecoder{
 //End of class
 }
 
-let decoder = new AnagramDecoder()
-
-decoder.findSingleWordAnagram('forest').then( anagrams => {
-  console.log(anagrams)
-})
-
-decoder.findPhraseAnagram("hello forest").then( anagrams => {
-  console.log(anagrams)
-})
-
-decoder.findAnagramName("adam sornoso").then( anagrams => {
-  console.log('name: ')
-  console.log(anagrams)
-})
+export default AnagramEncoder
