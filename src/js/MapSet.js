@@ -170,4 +170,4 @@ class MapSet extends Map{
 
 }
 
-module.exports =  MapSet
+export default MapSet

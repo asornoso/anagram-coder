@@ -12,4 +12,4 @@ class AnagramTreeNode {
 
 }
 
-module.exports = AnagramTreeNode
+export default AnagramTreeNode

@@ -2,11 +2,9 @@ import React, {useState, useEffect} from 'react';
 import CustomInput from './components/input.js'
 import RadioButtons from './components/radioButtons.js'
 import Results from './components/results.js'
-import * as Comlink from 'comlink'
+import AnagramEncoder from './js/AnagramEncoder.js'
 import anime from 'animejs/lib/anime.es.js';
-
-/* eslint-disable import/no-webpack-loader-syntax */
-import Worker from 'worker-loader!./js/web_worker.js'
+import {workerFn} from './js/web_worker.js'
 
 const App = () => {
 
@@ -20,19 +18,15 @@ const App = () => {
       </div>
       <InputWrapper submit={(array) => {  setResults(array); setLoader(false) }} loader={() => setLoader(true)}/>
       <div id='results-container'>
-      {
-        loader ?
-          <LoadingAnimation/>
-        :
-          results.length !== 0 ? <Results results={results}/>  :  <Results results={['no results found...']}/>
-      }
-
+        {
+          loader ?
+            <LoadingAnimation/>
+          :
+            results.length !== 0 ? <Results results={results}/>  :  <Results results={['no results found...']}/>
+        }
       </div>
-
     </div>
-
   )
-
 }
 
 
@@ -58,12 +52,12 @@ const InputWrapper = (props) => {
 
         <button onClick={ async ()=>{
           props.loader()
-          const worker = new Worker()
-          const proxy = Comlink.wrap(worker)
-          await proxy.generateResults(state)
-          const temp = await proxy.results
-          proxy[Comlink.releaseProxy]()
-          props.submit(temp)
+          //To load up the wordlists to the class variables which then are passed
+          //to the workerFn. The workerFn cannot transfer functions or imports
+          //A copy of all code needed is present in the workerFn  (web_worker.js)
+          let e = new AnagramEncoder()
+          let anagrams = await workerFn(state.type, state.input, e)
+          props.submit(anagrams)
 
         }}>Generate</button>
 
