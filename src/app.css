@@ -83,3 +83,44 @@ html, body{
 #input-container button{
   margin:2em;
 }
+
+#results-container{
+  border-top: 4px double white;
+  width: 55vw;
+}
+.results{
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-content: center;
+  padding: 1em;
+}
+.result-words{
+  display:flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-content: center;
+
+}
+
+.result-letters{
+  opacity: 0;
+  padding:1px;
+  text-align: center;
+}
+
+#loader-container{
+  display:flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+  padding: 1em;
+}
+
+.loader-letter{
+  padding:2px;
+}
