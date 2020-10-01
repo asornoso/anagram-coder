@@ -19,10 +19,14 @@ class MapSet extends Map{
 
   // New constructor functions for quicker instanciations from array
   create_from_array(array, default_val = undefined){
-    if(default_val)
+    if(default_val !== undefined)
     {
-      for(let i = 0; i < array.length; i++)
-        this.set(array[i], default_val)
+      for(let i = 0; i < array.length; i++){
+        if(this.has(array[i]))
+          this.set(array[i], this.get(array[i])+1)
+        else
+          this.set(array[i], default_val)
+      }
     }
     else{
       for(let i = 0; i < array.length; i++){
@@ -139,7 +143,7 @@ class MapSet extends Map{
 
 //Returns true if both maps have the same keys
   static equals(map_a, map_b){
-    if(map_a.size() !== map_b.size())
+    if(map_a.size !== map_b.size)
       return false
     else {
       for(let key of map_b.keys()){
