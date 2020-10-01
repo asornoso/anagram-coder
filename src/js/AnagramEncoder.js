@@ -14,7 +14,6 @@ class AnagramEncoder{
 
     this.user_input = undefined
     this.anagrams = []
-
   }
 
   //Finds an anagram in a name
@@ -42,7 +41,6 @@ class AnagramEncoder{
 
         }
         return names
-
   }
 
   //Finds a single word anagram for parameter
@@ -56,8 +54,6 @@ class AnagramEncoder{
             anagrams.push(this.words[i])
         }
         return anagrams
-
-
   }
 
   //Finds an anagram from a while phrase
@@ -73,7 +69,6 @@ class AnagramEncoder{
          return [phrases, rootNode]
        else
          return phrases
-
   }
 
   //Checks if 2 strings are anagrams
@@ -90,13 +85,13 @@ class AnagramEncoder{
 
 
   //Traverses a tree in reverse to make a phrase and returns that phrase
-  traverseToRootFrom(node){
+  static traverseToRootFrom(node){
     let phrase = ""
     while(node.parent !== undefined){
       phrase = node.data.word+' '+ phrase
       node = node.parent
     }
-    return phrase
+    return phrase.trim()
   }
 
   //Generates a tree. When no leftovers are present, calls traverseToRootFrom()
@@ -114,10 +109,9 @@ class AnagramEncoder{
         if(new_leftovers.size > 1)
           this.treeAnagramFinder(child, found)
         if(new_leftovers.size === 0)
-          found.push(this.traverseToRootFrom(child).trim())
+          found.push(AnagramEncoder.traverseToRootFrom(child))
       }
     }
-
   }
 
 //End of class

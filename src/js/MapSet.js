@@ -171,6 +171,13 @@ class MapSet extends Map{
     return true
   }
 
+  valueSize(){
+    let size = 0
+    for(let val of this.values())
+      size += val
+    return size
+  }
+
 
 }
 
